@@ -1,0 +1,54 @@
+from snowflake.snowpark import Session
+import random
+from datetime import time
+
+ #това е за таблица Visitor която въвеждам данни за име и фамилия където са запазени в отделни списъци и
+ #и след това взема име и фамилия и прави комбинации 
+ 
+def main(session: Session):
+    first_names = ["John", "Jane", "Alex", "Emily", "Chris", "Katie", "Michael", "Sarah", "David", "Laura"]
+    last_names = ["Smith", "Johnson", "Brown", "Taylor", "Anderson", "Thomas", "Jackson", "White", "Harris", "Martin"]
+
+    visitor_data = [
+        (random.choice(first_names), 
+         random.choice(last_names), 
+         random.randint(5, 80), 
+         f'+359-{random.randint(100,999)}-{random.randint(1000,9999)}')
+        for n in range(1,40)
+    ]
+    print(visitor_data)
+    
+
+    df = session.create_dataframe(visitor_data, schema=["FName", "LName", "Age", "PHONE"])
+    df.write.mode("append").save_as_table("Visitor", column_order="name")
+    return df
+
+
+
+
+ #Тък въвеждадм данните Employer таблицатавсичко се получава, но когато я пъсна пак вместо да 
+ #продължава автоматично id-то да се въвежда например стигнало е до 25 и да продължи 26,27
+ #то направо превърта и почва от 101 и всеки път като го използвам и става със 100 повече
+
+def main(session: Session):
+    first_names = ["John", "Jane", "Alex", "Emily", "Chris", "Katie", "Michael", "Sarah", "David", "Laura"]
+    last_names = ["Smith", "Johnson", "Brown", "Taylor", "Anderson", "Thomas", "Jackson", "White", "Harris", "Martin"]
+    positions = ["Manager", "Cashier", "Security", "Cleaner", "Technician"]
+
+    employer_data = [
+        (
+            random.choice(first_names), 
+            random.choice(last_names), 
+            random.choice(positions), 
+            time(random.randint(6, 14), random.choice([0, 30])),
+            time(random.randint(15, 23), random.choice([0, 30]))
+        )
+        for looper in range(1,20)
+    ]
+
+    df = session.create_dataframe(employer_data, schema=["First_Name", "Last_Name", "Position_J", "Start_Shift", "End_Shift"])
+
+    
+    df.write.mode("append").save_as_table("Employer", column_order="name")
+
+    return df
