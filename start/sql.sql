@@ -1,5 +1,8 @@
+CREATE DATABASE Amusement_Park
+USE Amusement_Park
+
 //Таблица Visitor с техните данни 
-create TABLE Visitor (
+create TABLE Visitors (
     VisitorID INT AUTOINCREMENT PRIMARY KEY,
     FName STRING,
     LName STRING,
@@ -8,7 +11,7 @@ create TABLE Visitor (
 );
 
 //Таблица Ticket където има информация за самия билет и кой го е купил
-CREATE TABLE Ticket(
+CREATE TABLE Tickets(
  TicketID INT AUTOINCREMENT PRIMARY KEY,
  VisitorID INT,
  Type_Of_Ticket STRING,
@@ -17,7 +20,7 @@ CREATE TABLE Ticket(
 );
 
 //Employer таблица в която пише за служителите и тяхната позиция и график за деня
-Create or replace table Employer(
+Create or replace table Employers(
  EmployerID INT AUTOINCREMENT PRIMARY KEY,
  First_Name STRING,
  Last_Name STRING,
@@ -35,7 +38,7 @@ FOREIGN KEY (EmployerID) REFERENCES Employer(EmployerID)
 );
 
 //самата атракция с описание за нея 
-create or replace table Attraction(
+create or replace table Attractions(
 AttractionID INT AUTOINCREMENT PRIMARY KEY,
 Name_of_Attraction STRING,
 TicketID INT,
