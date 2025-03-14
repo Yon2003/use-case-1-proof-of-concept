@@ -1,0 +1,127 @@
+Документация на базата данни за ЛунапаркОписаниеБазата данни е предназначена за управление на централизирана система за лунапарк. 
+Тя съдържа информация за посетители, служители, билети, атракции, магазини/ресторанти и плащания. 
+Структурата осигурява връзки между различните таблици чрез релации и първични/външни ключове.
+
+Таблици и техните описания1. Таблица VisitorСъхранява информация за посетителите на лунапарка.
+CREATE OR REPLACE TABLE Visitor (
+    VisitorID INT AUTOINCREMENT PRIMARY KEY,
+    First_Name STRING,
+    Last_Name STRING,
+    Age INT,
+    PHONE STRING
+);
+
+VisitorID - Уникален идентификатор за всеки посетител.
+First_Name - Име на посетителя.
+Last_Name - Фамилия на посетителя.
+Age - Възраст на посетителя.
+PHONE - Телефонен номер за контакт.
+
+Таблица EmployeesСъдържа информация за служителите, техните позиции и работни смени.
+CREATE OR REPLACE TABLE Employees (
+    EmployeeID INT AUTOINCREMENT PRIMARY KEY,
+    First_Name STRING,
+    Last_Name STRING,
+    Position_J STRING,
+    Start_Shift TIME,
+    End_Shift TIME
+);
+
+EmployeeID - Уникален идентификатор за всеки служител.
+First_Name - Име на служителя.
+Last_Name - Фамилия на служителя.
+Position_J - Длъжност на служителя.
+Start_Shift - Начало на работната смяна.
+End_Shift - Край на работната смяна.
+
+Таблица TicketsСъдържа информация за билетите и кой ги е закупил.
+CREATE OR REPLACE TABLE Tickets (
+    TicketID INT AUTOINCREMENT PRIMARY KEY,
+    VisitorID INT,
+    Type_Of_Ticket STRING,
+    Price DECIMAL(6,2),
+    FOREIGN KEY (VisitorID) REFERENCES Visitor(VisitorID)
+);
+
+TicketID - Уникален идентификатор за билета.
+VisitorID - Посетител, който притежава билета.
+Type_Of_Ticket - Вид на билета (например "Дневен", "Семеен", "VIP").
+Price - Цена на билета.
+
+Таблица DepartmentsОпределя къде работят служителите в лунапарка.
+CREATE OR REPLACE TABLE Departments (
+    DepartmentID INT AUTOINCREMENT PRIMARY KEY,
+    EmployeID INT,
+    Department STRING,
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+);
+
+DepartmentID - Уникален идентификатор за отдела.
+EmployeID - Служител, който работи в този отдел.
+Department - Име на отдела (например "Атракция", "Мениджър", "Ресторант").
+
+Таблица AttractionsОписва атракциите в лунапарка.
+CREATE OR REPLACE TABLE Attractions (
+    AttractionID INT AUTOINCREMENT PRIMARY KEY,
+    Name_of_Attraction STRING,
+    TicketID INT,
+    Capacity_of_Attraction INT,
+    Status STRING,
+    DepartmentID INT,
+    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID)
+);
+AttractionID - Уникален идентификатор за атракцията.
+Name_of_Attraction - Име на атракцията.
+TicketID - Билет, необходим за достъп до атракцията.
+Capacity_of_Attraction - Максимален капацитет на атракцията.
+Status - Текущ статус на атракцията (например "Работи", "Не работи").
+DepartmentID - Отделът, отговорен за атракцията.
+
+Таблица PaymentСъдържа информация за плащанията, направени от посетителите.
+CREATE OR REPLACE TABLE Payment (
+    PaymentID INT AUTOINCREMENT PRIMARY KEY,
+    VisitorID INT,
+    TicketID INT,
+    Amount DECIMAL(6,2),
+    Payment_Date TIME,
+    Payment_Method STRING,
+    FOREIGN KEY (VisitorID) REFERENCES Visitor(VisitorID),
+    FOREIGN KEY (TicketID) REFERENCES Tickets(TicketID)
+);
+PaymentID - Уникален идентификатор на плащането.
+VisitorID - Посетител, който е направил плащането.
+TicketID - Закупен билет.
+Amount - Сума на плащането.
+Payment_Date - Дата и час на плащането.
+Payment_Method - Начин на плащане (например "Карта", "Кеш").
+
+Таблица ShopСъхранява информация за магазини и ресторанти в лунапарка.
+CREATE OR REPLACE TABLE Shop (
+    ShopID INT AUTOINCREMENT PRIMARY KEY,
+    Name STRING,
+    Type STRING, // Дали е магазин или ресторант
+    DepartmentID INT,
+    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID)
+);
+ShopID - Уникален идентификатор за магазина или ресторанта.
+Name - Име на обекта.
+Type - Тип ("Магазин" или "Ресторант").
+DepartmentID - Отделът, отговорен за магазина/ресторанта.
+
+Таблица SaleСъдържа информация за продажбите в магазини и ресторанти.
+CREATE OR REPLACE TABLE Sale (
+    SaleID INT AUTOINCREMENT PRIMARY KEY,
+    VisitorID INT,
+    ShopID INT,
+    Total_Price DECIMAL(10,2),
+    Order_Time TIMESTAMP,
+    Payment STRING,
+    FOREIGN KEY (VisitorID) REFERENCES Visitor(VisitorID),
+    FOREIGN KEY (ShopID) REFERENCES Shop(ShopID)
+);
+SaleID - Уникален идентификатор за продажбата.
+VisitorID - Посетител, който е направил покупка.
+ShopID - Магазин или ресторант, от който е направена покупката.
+Total_Price - Общата стойност на покупката.
+Order_Time - Време на поръчката.
+Payment - Начин на плащане.
