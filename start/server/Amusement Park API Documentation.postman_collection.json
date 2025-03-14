@@ -1,0 +1,45 @@
+{
+	"info": {
+		"_postman_id": "0a3c31b2-eb74-4653-a3dd-06212fcabe3e",
+		"name": "Amusement Park API Documentation",
+		"description": "## 📌 OverviewThis API provides access to the amusement park database, allowing management of visitors, employees, tickets, attractions, and more. The API follows RESTful principles.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43086732"
+	},
+	"item": [
+		{
+			"name": "Attraction",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Attraction ID",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "employees",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"description": "Get All Employers\n\nGET /employers\n\nResponse:\n\n\\[  \n{  \n\"EmployerID\": 1,  \n\"First_Name\": \"Emily\",  \n\"Last_Name\": \"Johnson\",  \n\"Position_J\": \"Manager\",  \n\"Start_Shift\": \"08:00:00\",  \n\"End_Shift\": \"17:00:00\"  \n}  \n\\]"
+			},
+			"response": []
+		},
+		{
+			"name": "employeesID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"description": "GET /employers/1 като за id"
+			},
+			"response": []
+		}
+	]
+}
