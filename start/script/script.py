@@ -115,7 +115,7 @@ def insert_attractions(session: Session):
     attraction_data = [
         (
             name := random.choice(attraction_names),
-            random.choice(ticket_ids) if ticket_ids else "NULL",  # Свързване с билет, ако има налични
+            random.choice(ticket_ids) if ticket_ids else "NULL",
             random.randint(10, 50),  # Capacity
             random.choice(statuses),
             random.choice(department_ids)
@@ -124,7 +124,7 @@ def insert_attractions(session: Session):
     ]
     
     for name, ticket_id, capacity, status, department_id in attraction_data:
-        ticket_value = "NULL" if ticket_id == "NULL" else ticket_id  # Избягване на грешки при NULL
+        ticket_value = "NULL" if ticket_id == "NULL" else ticket_id 
         session.sql(f"""
             INSERT INTO Attractions (Name_of_Attraction, TicketID, Capacity_of_Attraction, Status, DepartmentID) 
             VALUES ('{name}', {ticket_value}, {capacity}, '{status}', {department_id})
@@ -133,9 +133,9 @@ def insert_attractions(session: Session):
     print("Inserted attraction data successfully.")
 
 def main(session: Session):
-    # insert_visitors(session)
-    # insert_employees(session)
-    # insert_tickets(session)
+    insert_visitors(session)
+    insert_employees(session)
+    insert_tickets(session)
     insert_departments(session)
     insert_attractions(session)
     
